@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 const ROC = [
   { day:1, date:"Feb 18", wd:"Wed", su:"5:45 AM", if:"5:46 PM", fj:"5:45 AM", dh:"12:25 PM", as:"3:19 PM", mg:"5:46 PM", is:"7:05 PM" },
@@ -96,6 +96,71 @@ const TAS = [
   { day:27, date:"Mar 17", wd:"Tue", su:"5:00 AM", if:"6:31 PM", fj:"5:00 AM", dh:"12:15 PM", as:"3:50 PM", mg:"6:31 PM", is:"7:46 PM" },
   { day:28, date:"Mar 18", wd:"Wed", su:"4:58 AM", if:"6:33 PM", fj:"4:58 AM", dh:"12:15 PM", as:"3:51 PM", mg:"6:33 PM", is:"7:47 PM" },
   { day:29, date:"Mar 19", wd:"Thu", su:"4:56 AM", if:"6:34 PM", fj:"4:56 AM", dh:"12:15 PM", as:"3:52 PM", mg:"6:34 PM", is:"7:48 PM" },
+];
+
+const BNG = [
+  { day:1, date:"Feb 18", wd:"Wed", su:"5:38 AM", if:"5:41 PM", fj:"5:38 AM", dh:"12:18 PM", as:"3:14 PM", mg:"5:41 PM", is:"6:59 PM" },
+  { day:2, date:"Feb 19", wd:"Thu", su:"5:37 AM", if:"5:42 PM", fj:"5:37 AM", dh:"12:18 PM", as:"3:15 PM", mg:"5:42 PM", is:"7:00 PM" },
+  { day:3, date:"Feb 20", wd:"Fri", su:"5:35 AM", if:"5:44 PM", fj:"5:35 AM", dh:"12:18 PM", as:"3:16 PM", mg:"5:44 PM", is:"7:01 PM" },
+  { day:4, date:"Feb 21", wd:"Sat", su:"5:34 AM", if:"5:45 PM", fj:"5:34 AM", dh:"12:18 PM", as:"3:17 PM", mg:"5:45 PM", is:"7:02 PM" },
+  { day:5, date:"Feb 22", wd:"Sun", su:"5:32 AM", if:"5:46 PM", fj:"5:32 AM", dh:"12:18 PM", as:"3:18 PM", mg:"5:46 PM", is:"7:04 PM" },
+  { day:6, date:"Feb 23", wd:"Mon", su:"5:31 AM", if:"5:47 PM", fj:"5:31 AM", dh:"12:18 PM", as:"3:19 PM", mg:"5:47 PM", is:"7:05 PM" },
+  { day:7, date:"Feb 24", wd:"Tue", su:"5:29 AM", if:"5:49 PM", fj:"5:29 AM", dh:"12:18 PM", as:"3:20 PM", mg:"5:49 PM", is:"7:06 PM" },
+  { day:8, date:"Feb 25", wd:"Wed", su:"5:28 AM", if:"5:50 PM", fj:"5:28 AM", dh:"12:18 PM", as:"3:21 PM", mg:"5:50 PM", is:"7:07 PM" },
+  { day:9, date:"Feb 26", wd:"Thu", su:"5:26 AM", if:"5:51 PM", fj:"5:26 AM", dh:"12:17 PM", as:"3:21 PM", mg:"5:51 PM", is:"7:08 PM" },
+  { day:10, date:"Feb 27", wd:"Fri", su:"5:25 AM", if:"5:52 PM", fj:"5:25 AM", dh:"12:17 PM", as:"3:22 PM", mg:"5:52 PM", is:"7:09 PM" },
+  { day:11, date:"Feb 28", wd:"Sat", su:"5:23 AM", if:"5:53 PM", fj:"5:23 AM", dh:"12:17 PM", as:"3:23 PM", mg:"5:53 PM", is:"7:11 PM" },
+  { day:12, date:"Mar 1", wd:"Sun", su:"5:22 AM", if:"5:55 PM", fj:"5:22 AM", dh:"12:17 PM", as:"3:24 PM", mg:"5:55 PM", is:"7:12 PM" },
+  { day:13, date:"Mar 2", wd:"Mon", su:"5:20 AM", if:"5:56 PM", fj:"5:20 AM", dh:"12:17 PM", as:"3:25 PM", mg:"5:56 PM", is:"7:13 PM" },
+  { day:14, date:"Mar 3", wd:"Tue", su:"5:19 AM", if:"5:57 PM", fj:"5:19 AM", dh:"12:16 PM", as:"3:26 PM", mg:"5:57 PM", is:"7:14 PM" },
+  { day:15, date:"Mar 4", wd:"Wed", su:"5:17 AM", if:"5:58 PM", fj:"5:17 AM", dh:"12:16 PM", as:"3:26 PM", mg:"5:58 PM", is:"7:15 PM" },
+  { day:16, date:"Mar 5", wd:"Thu", su:"5:15 AM", if:"5:59 PM", fj:"5:15 AM", dh:"12:16 PM", as:"3:27 PM", mg:"5:59 PM", is:"7:16 PM" },
+  { day:17, date:"Mar 6", wd:"Fri", su:"5:14 AM", if:"6:01 PM", fj:"5:14 AM", dh:"12:16 PM", as:"3:28 PM", mg:"6:01 PM", is:"7:18 PM" },
+  { day:18, date:"Mar 7", wd:"Sat", su:"5:12 AM", if:"6:02 PM", fj:"5:12 AM", dh:"12:15 PM", as:"3:29 PM", mg:"6:02 PM", is:"7:19 PM" },
+  { day:19, date:"Mar 8", wd:"Sun", su:"6:10 AM", if:"7:02 PM", fj:"6:10 AM", dh:"1:15 PM", as:"4:29 PM", mg:"7:02 PM", is:"8:19 PM", note:"DST" },
+  { day:20, date:"Mar 9", wd:"Mon", su:"6:09 AM", if:"7:03 PM", fj:"6:09 AM", dh:"1:15 PM", as:"4:30 PM", mg:"7:03 PM", is:"8:20 PM" },
+  { day:21, date:"Mar 10", wd:"Tue", su:"6:07 AM", if:"7:04 PM", fj:"6:07 AM", dh:"1:15 PM", as:"4:31 PM", mg:"7:04 PM", is:"8:21 PM" },
+  { day:22, date:"Mar 11", wd:"Wed", su:"6:05 AM", if:"7:05 PM", fj:"6:05 AM", dh:"1:15 PM", as:"4:31 PM", mg:"7:05 PM", is:"8:22 PM" },
+  { day:23, date:"Mar 12", wd:"Thu", su:"6:04 AM", if:"7:06 PM", fj:"6:04 AM", dh:"1:14 PM", as:"4:32 PM", mg:"7:06 PM", is:"8:24 PM" },
+  { day:24, date:"Mar 13", wd:"Fri", su:"6:02 AM", if:"7:08 PM", fj:"6:02 AM", dh:"1:14 PM", as:"4:33 PM", mg:"7:08 PM", is:"8:25 PM" },
+  { day:25, date:"Mar 14", wd:"Sat", su:"6:00 AM", if:"7:09 PM", fj:"6:00 AM", dh:"1:14 PM", as:"4:34 PM", mg:"7:09 PM", is:"8:26 PM" },
+  { day:26, date:"Mar 15", wd:"Sun", su:"5:59 AM", if:"7:10 PM", fj:"5:59 AM", dh:"1:14 PM", as:"4:34 PM", mg:"7:10 PM", is:"8:27 PM" },
+  { day:27, date:"Mar 16", wd:"Mon", su:"5:57 AM", if:"7:11 PM", fj:"5:57 AM", dh:"1:14 PM", as:"4:35 PM", mg:"7:11 PM", is:"8:28 PM" },
+  { day:28, date:"Mar 17", wd:"Tue", su:"5:57 AM", if:"7:12 PM", fj:"5:57 AM", dh:"1:12 PM", as:"4:35 PM", mg:"7:12 PM", is:"8:30 PM" },
+  { day:29, date:"Mar 18", wd:"Wed", su:"5:55 AM", if:"7:13 PM", fj:"5:55 AM", dh:"1:14 PM", as:"4:36 PM", mg:"7:13 PM", is:"8:31 PM" },
+  { day:30, date:"Mar 19", wd:"Thu", su:"5:53 AM", if:"7:15 PM", fj:"5:53 AM", dh:"1:12 PM", as:"4:37 PM", mg:"7:15 PM", is:"8:32 PM" },
+];
+
+const AST = [
+  { day:1, date:"Feb 19", wd:"Чтв", su:"5:49 AM", if:"5:42 PM", fj:"5:49 AM", dh:"12:33 PM", as:"3:51 PM", mg:"5:42 PM", is:"7:09 PM" },
+  { day:2, date:"Feb 20", wd:"Птн", su:"5:47 AM", if:"5:44 PM", fj:"5:47 AM", dh:"12:33 PM", as:"3:53 PM", mg:"5:44 PM", is:"7:10 PM" },
+  { day:3, date:"Feb 21", wd:"Сбт", su:"5:45 AM", if:"5:45 PM", fj:"5:45 AM", dh:"12:33 PM", as:"3:54 PM", mg:"5:45 PM", is:"7:12 PM" },
+  { day:4, date:"Feb 22", wd:"Вск", su:"5:43 AM", if:"5:47 PM", fj:"5:43 AM", dh:"12:33 PM", as:"3:56 PM", mg:"5:47 PM", is:"7:13 PM" },
+  { day:5, date:"Feb 23", wd:"Пнд", su:"5:41 AM", if:"5:49 PM", fj:"5:41 AM", dh:"12:33 PM", as:"3:57 PM", mg:"5:49 PM", is:"7:15 PM" },
+  { day:6, date:"Feb 24", wd:"Втр", su:"5:39 AM", if:"5:51 PM", fj:"5:39 AM", dh:"12:32 PM", as:"3:59 PM", mg:"5:51 PM", is:"7:17 PM" },
+  { day:7, date:"Feb 25", wd:"Срд", su:"5:37 AM", if:"5:52 PM", fj:"5:37 AM", dh:"12:32 PM", as:"4:01 PM", mg:"5:52 PM", is:"7:19 PM" },
+  { day:8, date:"Feb 26", wd:"Чтв", su:"5:35 AM", if:"5:54 PM", fj:"5:35 AM", dh:"12:32 PM", as:"4:02 PM", mg:"5:54 PM", is:"7:20 PM" },
+  { day:9, date:"Feb 27", wd:"Птн", su:"5:33 AM", if:"5:56 PM", fj:"5:33 AM", dh:"12:32 PM", as:"4:04 PM", mg:"5:56 PM", is:"7:22 PM" },
+  { day:10, date:"Feb 28", wd:"Сбт", su:"5:31 AM", if:"5:58 PM", fj:"5:31 AM", dh:"12:32 PM", as:"4:05 PM", mg:"5:58 PM", is:"7:24 PM" },
+  { day:11, date:"Mar 1", wd:"Вск", su:"5:29 AM", if:"6:00 PM", fj:"5:29 AM", dh:"12:32 PM", as:"4:07 PM", mg:"6:00 PM", is:"7:25 PM" },
+  { day:12, date:"Mar 2", wd:"Пнд", su:"5:27 AM", if:"6:01 PM", fj:"5:27 AM", dh:"12:31 PM", as:"4:08 PM", mg:"6:01 PM", is:"7:27 PM" },
+  { day:13, date:"Mar 3", wd:"Втр", su:"5:25 AM", if:"6:03 PM", fj:"5:25 AM", dh:"12:31 PM", as:"4:10 PM", mg:"6:03 PM", is:"7:29 PM" },
+  { day:14, date:"Mar 4", wd:"Срд", su:"5:22 AM", if:"6:05 PM", fj:"5:22 AM", dh:"12:31 PM", as:"4:11 PM", mg:"6:05 PM", is:"7:30 PM" },
+  { day:15, date:"Mar 5", wd:"Чтв", su:"5:20 AM", if:"6:06 PM", fj:"5:20 AM", dh:"12:31 PM", as:"4:13 PM", mg:"6:06 PM", is:"7:32 PM" },
+  { day:16, date:"Mar 6", wd:"Птн", su:"5:18 AM", if:"6:08 PM", fj:"5:18 AM", dh:"12:31 PM", as:"4:14 PM", mg:"6:08 PM", is:"7:34 PM" },
+  { day:17, date:"Mar 7", wd:"Сбт", su:"5:16 AM", if:"6:10 PM", fj:"5:16 AM", dh:"12:30 PM", as:"4:16 PM", mg:"6:10 PM", is:"7:36 PM" },
+  { day:18, date:"Mar 8", wd:"Вск", su:"5:14 AM", if:"6:12 PM", fj:"5:14 AM", dh:"12:30 PM", as:"4:17 PM", mg:"6:12 PM", is:"7:37 PM" },
+  { day:19, date:"Mar 9", wd:"Пнд", su:"5:11 AM", if:"6:13 PM", fj:"5:11 AM", dh:"12:30 PM", as:"4:19 PM", mg:"6:13 PM", is:"7:39 PM" },
+  { day:20, date:"Mar 10", wd:"Втр", su:"5:09 AM", if:"6:15 PM", fj:"5:09 AM", dh:"12:30 PM", as:"4:20 PM", mg:"6:15 PM", is:"7:41 PM" },
+  { day:21, date:"Mar 11", wd:"Срд", su:"5:07 AM", if:"6:17 PM", fj:"5:07 AM", dh:"12:29 PM", as:"4:22 PM", mg:"6:17 PM", is:"7:43 PM" },
+  { day:22, date:"Mar 12", wd:"Чтв", su:"5:05 AM", if:"6:18 PM", fj:"5:05 AM", dh:"12:29 PM", as:"4:23 PM", mg:"6:18 PM", is:"7:45 PM" },
+  { day:23, date:"Mar 13", wd:"Птн", su:"5:02 AM", if:"6:20 PM", fj:"5:02 AM", dh:"12:29 PM", as:"4:25 PM", mg:"6:20 PM", is:"7:46 PM" },
+  { day:24, date:"Mar 14", wd:"Сбт", su:"5:00 AM", if:"6:22 PM", fj:"5:00 AM", dh:"12:28 PM", as:"4:26 PM", mg:"6:22 PM", is:"7:48 PM" },
+  { day:25, date:"Mar 15", wd:"Вск", su:"4:58 AM", if:"6:23 PM", fj:"4:58 AM", dh:"12:28 PM", as:"4:27 PM", mg:"6:23 PM", is:"7:50 PM" },
+  { day:26, date:"Mar 16", wd:"Пнд", su:"4:55 AM", if:"6:25 PM", fj:"4:55 AM", dh:"12:28 PM", as:"4:29 PM", mg:"6:25 PM", is:"7:52 PM" },
+  { day:27, date:"Mar 17", wd:"Втр", su:"4:53 AM", if:"6:27 PM", fj:"4:53 AM", dh:"12:28 PM", as:"4:30 PM", mg:"6:27 PM", is:"7:54 PM" },
+  { day:28, date:"Mar 18", wd:"Срд", su:"4:50 AM", if:"6:29 PM", fj:"4:50 AM", dh:"12:27 PM", as:"4:31 PM", mg:"6:29 PM", is:"7:55 PM" },
+  { day:29, date:"Mar 19", wd:"Чтв", su:"4:48 AM", if:"6:30 PM", fj:"4:48 AM", dh:"12:27 PM", as:"4:33 PM", mg:"6:30 PM", is:"7:57 PM" },
 ];
 
 function fastMins(su, ift) {
@@ -255,13 +320,21 @@ export default function BaloRamadan() {
   const [selected, setSelected] = useState(0);
   const [view, setView] = useState("crescent");
 
-  const data = city === "roc" ? ROC : city === "kos" ? KOS : TAS;
+  const data = city === "roc"
+    ? ROC
+    : city === "bng"
+      ? BNG
+      : city === "kos"
+        ? KOS
+        : city === "tas"
+          ? TAS
+          : AST;
   const d = data[selected] || data[0];
   const mins = fastMins(d.su, d.if);
 
   useEffect(() => { if (selected >= data.length) setSelected(data.length - 1); }, [city, data.length, selected]);
 
-  const ru = city === "tas";
+  const ru = city === "tas" || city === "ast";
 
   const L = {
     mubarak: ru ? "РАМАДАН МУБАРАК" : "RAMADAN MUBARAK",
@@ -458,8 +531,10 @@ export default function BaloRamadan() {
         <div style={{ display: "flex", justifyContent: "center", gap: 10, marginBottom: 18, flexWrap: "wrap", alignItems: "center" }}>
           <div className="pill-wrap">
             <button className={`pill-btn ${city==="roc"?"on":""}`} onClick={() => setCity("roc")}>🇺🇸 Rochester</button>
+            <button className={`pill-btn ${city==="bng"?"on":""}`} onClick={() => setCity("bng")}>🇺🇸 Binghamton</button>
             <button className={`pill-btn ${city==="kos"?"on":""}`} onClick={() => setCity("kos")}>🇽🇰 Pristina</button>
             <button className={`pill-btn ${city==="tas"?"on":""}`} onClick={() => setCity("tas")}>🇺🇿 Ташкент</button>
+            <button className={`pill-btn ${city==="ast"?"on":""}`} onClick={() => setCity("ast")}>🇰🇿 Астана</button>
           </div>
           <div className="pill-wrap">
             <button className={`vpill ${view==="crescent"?"on":""}`} onClick={() => setView("crescent")}>{L.crescent}</button>
@@ -474,7 +549,15 @@ export default function BaloRamadan() {
             <div className="glass-card" style={{ padding: "16px 10px 8px", marginBottom: 14 }}>
               <div style={{ textAlign: "center", marginBottom: 2 }}>
                 <span style={{ fontFamily: "'Outfit'", fontSize: 9, fontWeight: 500, letterSpacing: 2, color: "rgba(184,138,222,0.6)", textTransform: "uppercase" }}>
-                  {city === "roc" ? "Rochester, NY · ISNA 15°/15°" : city === "kos" ? "Pristina, Kosovo · BIK Official" : "Ташкент, Узбекистан · Духовное управление"}
+                  {city === "roc"
+                    ? "Rochester, NY · ISNA 15°/15°"
+                    : city === "bng"
+                      ? "Binghamton, NY · Johnson City Masjid"
+                      : city === "kos"
+                        ? "Pristina, Kosovo · BIK Official"
+                        : city === "tas"
+                          ? "Ташкент, Узбекистан · Духовное управление"
+                          : "Астана, Казахстан · Духовное управление"}
                 </span>
               </div>
               <CrescentArc data={data} selected={selected} onSelect={(i) => setSelected(i ?? 0)} />
@@ -604,8 +687,10 @@ export default function BaloRamadan() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
               {[
                 { flag: "🇺🇸", name: "Rochester", d: ROC[selected] },
+                { flag: "🇺🇸", name: "Binghamton", d: BNG[selected] },
                 { flag: "🇽🇰", name: "Pristina", d: KOS[selected] },
-                { flag: "🇺🇿", name: "Tashkent", d: TAS[selected] },
+                { flag: "🇺🇿", name: "Ташкент", d: TAS[selected] },
+                { flag: "🇰🇿", name: "Астана", d: AST[selected] },
               ].map((c, ci) => (
                 <div className="cmp-card" key={ci}>
                   <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
@@ -630,42 +715,30 @@ export default function BaloRamadan() {
             </div>
 
             {/* Stats */}
-            <div className="glass-card" style={{ padding: 16, marginTop: 10 }}>
-              <div style={{ textAlign: "center", marginBottom: 10 }}>
-                <span style={{ fontFamily: "'Outfit'", fontSize: 9, fontWeight: 600, letterSpacing: 2, color: "rgba(184,138,222,0.5)", textTransform: "uppercase" }}>{L.overview}</span>
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr auto 1fr", alignItems: "start" }}>
-                <div style={{ textAlign: "center" }}>
-                  <div style={{ fontFamily: "'Outfit'", fontSize: 12, color: "rgba(255,255,255,0.6)", marginBottom: 8 }}>🇺🇸 Rochester</div>
-                  {[["Days","30"],["Shortest","12h 1m"],["Longest","13h 23m"],["Method","ISNA"],["Lat","43.16°N"],["DST","Mar 8"]].map(([l,v],i)=>(
-                    <div key={i} style={{ display:"flex", justifyContent:"space-between", padding:"3px 8px", fontSize:10 }}>
-                      <span style={{ color:"rgba(255,255,255,0.25)" }}>{l}</span>
-                      <span style={{ color:"rgba(255,255,255,0.6)", fontWeight:500 }}>{v}</span>
-                    </div>
-                  ))}
+              <div className="glass-card" style={{ padding: 16, marginTop: 10 }}>
+                <div style={{ textAlign: "center", marginBottom: 10 }}>
+                  <span style={{ fontFamily: "'Outfit'", fontSize: 9, fontWeight: 600, letterSpacing: 2, color: "rgba(184,138,222,0.5)", textTransform: "uppercase" }}>{L.overview}</span>
                 </div>
-                <div style={{ width: 1, background: "linear-gradient(rgba(184,138,222,0), rgba(184,138,222,0.2), rgba(184,138,222,0))", alignSelf: "stretch", margin: "0 4px" }} />
-                <div style={{ textAlign: "center" }}>
-                  <div style={{ fontFamily: "'Outfit'", fontSize: 12, color: "rgba(255,255,255,0.6)", marginBottom: 8 }}>🇽🇰 Pristina</div>
-                  {[["Days","29"],["Shortest","12h 32m"],["Longest","13h 51m"],["Method","BIK"],["Lat","42.67°N"],["DST","None"]].map(([l,v],i)=>(
-                    <div key={i} style={{ display:"flex", justifyContent:"space-between", padding:"3px 8px", fontSize:10 }}>
-                      <span style={{ color:"rgba(255,255,255,0.25)" }}>{l}</span>
-                      <span style={{ color:"rgba(255,255,255,0.6)", fontWeight:500 }}>{v}</span>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ width: 1, background: "linear-gradient(rgba(184,138,222,0), rgba(184,138,222,0.2), rgba(184,138,222,0))", alignSelf: "stretch", margin: "0 4px" }} />
-                <div style={{ textAlign: "center" }}>
-                  <div style={{ fontFamily: "'Outfit'", fontSize: 12, color: "rgba(255,255,255,0.6)", marginBottom: 8 }}>🇺🇿 Tashkent</div>
-                  {[["Days","29"],["Shortest","12h 20m"],["Longest","13h 38m"],["Method","Muslim Board"],["Lat","41.31°N"],["DST","None"]].map(([l,v],i)=>(
-                    <div key={i} style={{ display:"flex", justifyContent:"space-between", padding:"3px 8px", fontSize:10 }}>
-                      <span style={{ color:"rgba(255,255,255,0.25)" }}>{l}</span>
-                      <span style={{ color:"rgba(255,255,255,0.6)", fontWeight:500 }}>{v}</span>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12 }}>
+                  {[
+                    { title: "🇺🇸 Rochester", rows: [["Days","30"],["Shortest","12h 1m"],["Longest","13h 23m"],["Method","ISNA"],["Lat","43.16°N"],["DST","Mar 8"]] },
+                    { title: "🇺🇸 Binghamton", rows: [["Days","30"],["Shortest","12h 3m"],["Longest","13h 22m"],["Method","Local Masjid"],["Lat","42.10°N"],["DST","Mar 8"]] },
+                    { title: "🇽🇰 Pristina", rows: [["Days","29"],["Shortest","12h 32m"],["Longest","13h 51m"],["Method","BIK"],["Lat","42.67°N"],["DST","None"]] },
+                    { title: "🇺🇿 Ташкент", rows: [["Days","29"],["Shortest","12h 20m"],["Longest","13h 38m"],["Method","Дух. управ."],["Lat","41.31°N"],["DST","Нет"]] },
+                    { title: "🇰🇿 Астана", rows: [["Days","29"],["Shortest","11h 53m"],["Longest","13h 42m"],["Method","Дух. управ."],["Lat","51.17°N"],["DST","Нет"]] },
+                  ].map((item, idx) => (
+                    <div key={idx} style={{ textAlign: "center" }}>
+                      <div style={{ fontFamily: "'Outfit'", fontSize: 11, color: "rgba(255,255,255,0.6)", marginBottom: 8 }}>{item.title}</div>
+                      {item.rows.map(([label, value], rowIndex) => (
+                        <div key={rowIndex} style={{ display: "flex", justifyContent: "space-between", padding: "2px 6px", fontSize: 9 }}>
+                          <span style={{ color: "rgba(255,255,255,0.25)" }}>{label}</span>
+                          <span style={{ color: "rgba(255,255,255,0.6)", fontWeight: 500 }}>{value}</span>
+                        </div>
+                      ))}
                     </div>
                   ))}
                 </div>
               </div>
-            </div>
           </div>
         )}
 
